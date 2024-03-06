@@ -1,4 +1,4 @@
-# Moosic - Facial emotion detection based music recommendation system
+<!-- # Moosic - Facial emotion detection based music recommendation system
 #### Submission for Microsoft Engage 2022
 ![logo](https://user-images.githubusercontent.com/81975567/170825957-55b94708-4893-4e13-a4aa-c5fa4ca9b070.png)
 
@@ -57,7 +57,7 @@ This project depends on Python and following packages which can be easily instal
 - streamlit-webrtc 0.37.0
 - opencv-python 4.5.5.64
 - mediapipe 0.8.10
- 
+
 ### Instructions
 #### Testing Locally
 -	`git clone https://github.com/khankhushi/Moosic`
@@ -66,7 +66,7 @@ This project depends on Python and following packages which can be easily instal
 -	`streamlit run app.py`
 -	The app is now running at http://localhost:8501
 -	While testing, wait for the model to detect your emotions and click on recommend button to get songs based on a particular emotion
-- Emotion used previously are stored as cache and might cause an error in recommending music, delete `detected_emotion.npy file` in the directory to resolve this. 
+- Emotion used previously are stored as cache and might cause an error in recommending music, delete `detected_emotion.npy file` in the directory to resolve this.
 - Recommended music is loaded in next tab as a youtube search query.
 
 ### System Architechture
@@ -86,10 +86,10 @@ This project depends on Python and following packages which can be easily instal
 - Deploying the web app.
 - Integration of an inbuilt music player using  SpotiPy library, with spotify authentication.
 - Addition of more gestures, and control of volume using gesture detection.
-- Improved Reliablity and addition of User Feedback 
+- Improved Reliablity and addition of User Feedback
 
 ### References
 - [Emotional Detection and Music Recommendation System
 based on User Facial Expression - S Metilda Florence and M Uma](https://iopscience.iop.org/article/10.1088/1757-899X/912/6/062007/pdf)
 
-
+ -->
