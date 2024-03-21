@@ -8,10 +8,9 @@ from keras.models import load_model
 import webbrowser
 
 # Set Streamlit page configuration for wide mode
-st.set_page_config(page_title="Mood Sick 🎵", page_icon="🎵", layout="wide",)
+st.set_page_config(page_title="Mood Sick 🎵", page_icon="🎵", layout="wide")
 
 # Apply custom CSS for a light-themed UI
-# Update your custom_css variable
 custom_css = """
 body {
     background-color: #f8f9fa; /* Light theme background color */
@@ -76,7 +75,10 @@ footer {
 
 video {
     border-radius: 10px; /* Add border-radius to the video frame */
+    width: 100%; /* Set the width to 100% for responsiveness */
+    height: 100px;
 }
+
 
 #video-container {
     background-color: #f2f2f2; /* Light gray background for the video container */
@@ -110,25 +112,9 @@ video {
     color: #777;
     text-align: center;
 }
-
 """
 
 st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
-
-
-col1, col2, col3 = st.columns([2, 2, 7])  # Adjust the width as needed
-
-with col1:
-    st.image("D:\Moodsick\images\logo2.svg", width=500, use_column_width=False)
-
-# with col2:
-#     st.text("")  # Add an empty text element for spacing
-
-
-
-with col3:
-    st.title("📜")
-    st.markdown('<p class="intro-text" style="color: #ff5733;font-weight: bold;">📌 Mood Sick is an emotion detection-based music recommendation system.<br>📌 To get recommended songs, start by allowing the microphone and camera access.</p>', unsafe_allow_html=True)
 
 model = load_model("model.h5")
 label = np.load("labels.npy")
@@ -139,22 +125,27 @@ hol = holistic.Holistic()
 drawing = mp.solutions.drawing_utils
 
 if "run" not in st.session_state:
-    st.session_state["run"] = "true"
+    st.session_state["run"] = True
+
 try:
     detected_emotion = np.load("detected_emotion.npy")[0]
 except:
     detected_emotion = ""
 
 if not detected_emotion:
-    st.session_state["run"] = "true"
+    st.session_state["run"] = True
 else:
-    st.session_state["run"] = "false"
+    st.session_state["run"] = False
 
 class EmotionDetector:
+    def __init__(self):
+        self.holistic = holistic.Holistic()
+        self.drawing = mp.solutions.drawing_utils
+
     def recv(self, frame):
         frm = frame.to_ndarray(format="bgr24")
         frm = cv2.flip(frm, 1)  # Flipping the frame from left to right
-        res = hol.process(cv2.cvtColor(frm, cv2.COLOR_BGR2RGB))
+        res = self.holistic.process(cv2.cvtColor(frm, cv2.COLOR_BGR2RGB))
 
         lst = []
 
@@ -188,18 +179,29 @@ class EmotionDetector:
         cv2.putText(frm, pred, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         np.save("detected_emotion.npy", np.array([pred]))
 
-        drawing.draw_landmarks(frm, res.face_landmarks, holistic.FACEMESH_TESSELATION)
-        drawing.draw_landmarks(frm, res.left_hand_landmarks, hands.HAND_CONNECTIONS)
-        drawing.draw_landmarks(frm, res.right_hand_landmarks, hands.HAND_CONNECTIONS)
+        self.drawing.draw_landmarks(frm, res.face_landmarks, holistic.FACEMESH_TESSELATION)
+        self.drawing.draw_landmarks(frm, res.left_hand_landmarks, hands.HAND_CONNECTIONS)
+        self.drawing.draw_landmarks(frm, res.right_hand_landmarks, hands.HAND_CONNECTIONS)
 
         return av.VideoFrame.from_ndarray(frm, format="bgr24")
+
+col1, col2, col3 = st.columns([2, 2, 7])  # Adjust the width as needed
+
+with col1:
+    st.image("D:\Moodsick\images\logo2.svg", width=500, use_column_width=False)
+
+with col3:
+    st.title("📜")
+    st.markdown('<p class="intro-text" style="color: #ff5733;font-weight: bold;">📌 Mood Sick is an emotion detection-based music recommendation system.<br>📌 To get recommended songs, start by allowing the microphone and camera access.</p>', unsafe_allow_html=True)
 
 lang = st.text_input("Enter your preferred language")
 artist = st.text_input("Enter your preferred artist")
 
-if lang and artist and st.session_state["run"] != "false":
+if lang and artist and st.session_state["run"]:
     webrtc_streamer(
-        key="key", desired_playing_state=True, video_processor_factory=EmotionDetector
+        key="example", 
+        desired_playing_state=True,
+        video_processor_factory=EmotionDetector
     )
 
 btn = st.button("Recommend music 🎵", key="button-recommend")
@@ -207,17 +209,15 @@ btn = st.button("Recommend music 🎵", key="button-recommend")
 if btn:
     if not detected_emotion:
         st.warning("Please let me capture your emotion first!")
-        st.session_state["run"] = "true"
+        st.session_state["run"] = True
     else:
         webbrowser.open(
-            f"https://www.youtube.com/results?search_query={lang}+{detected_emotion}+songs+{artist}"
-        )
-        np.save("detected_emotion.npy", np.array([""]))
-        st.session_state["run"] = "false"
+f"https://www.youtube.com/results?search_query={lang}+{detected_emotion}+songs+{artist}"
+)
+np.save("detected_emotion.npy", np.array([""]))
+st.session_state["run"] = False
 
 st.write('Made with ❤️ by Pratham & Ridhima')
-
-# Streamlit Customisation
 st.markdown(""" <style>
 header {visibility: hidden;}
 footer {visibility: hidden;}
