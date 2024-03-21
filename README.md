@@ -1,5 +1,5 @@
 MoodSick - Facial emotion detection based music recommendation system
-![logo](https://github.com/prathamrehil/MoodSick/blob/main/images/logo2.svg)
+![logo](https://github.com/prathamrehil/MoodSick/blob/main/images/logo3.png)
 
 ### About
 
