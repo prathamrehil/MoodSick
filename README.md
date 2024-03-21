@@ -27,6 +27,20 @@ Minimalistic landing page filled with Light-theme.
 3. Detection of various gestures like [Hello, Thumbsup, Nope, Rock]
    ![image](https://github.com/prathamrehil/MoodSick/blob/main/images/ges1.png)
 
+### Result
+
+Utilizing the capabilities of YouTube, this system will execute a query based on the detected language, singer, and facial expression mood, delivering a refined and personalized experience.
+
+It automatically runs the query after detection in new tab.
+
+Example query:
+
+![image](https://github.com/prathamrehil/MoodSick/blob/main/images/res2.png)
+
+Example result :
+
+![image](https://github.com/prathamrehil/MoodSick/blob/main/images/res1.png)
+
 ### Dependencies
 
 This project depends on Python and following packages which can be easily installed through `requirements.txt` file by running the following command:
