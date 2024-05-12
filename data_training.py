@@ -72,7 +72,7 @@ def main():
         return
     X_train, X_test, y_train, y_test = preprocess_data(X, y)
     model = build_model(X_train.shape[1:], len(labels))
-    train_model(model, X_train, y_train, epochs=100)  # Increase the number of epochs
+    train_model(model, X_train, y_train, epochs=80)  # Increase the number of epochs
     evaluate_model(model, X_test, y_test)
     save_model(model, labels)
 
