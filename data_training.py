@@ -2,11 +2,7 @@ import os
 import numpy as np
 import cv2
 from sklearn.model_selection import train_test_split
-from keras.utils import to_categorical
-from keras.layers import Input, Dense, Dropout
-from keras.models import Model
-from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping
+import tensorflow as tf
 
 def load_data(directory):
     npy_files = [file_name for file_name in os.listdir(directory) if file_name.endswith(".npy") and file_name != "labels.npy"]
@@ -32,7 +28,7 @@ def load_data(directory):
 
 def preprocess_data(X, y):
     # Converting Integer to binary class matrix
-    y = to_categorical(y)
+    y = tf.keras.utils.to_categorical(y)
     # Shuffling data to avoid clustering
     idx = np.random.permutation(X.shape[0])
     X = X[idx]
@@ -42,21 +38,22 @@ def preprocess_data(X, y):
     return X_train, X_test, y_train, y_test
 
 def build_model(input_shape, num_classes):
-    input_layer = Input(shape=input_shape)
-    middle_layer1 = Dense(1024, activation="relu")(input_layer)
-    dropout1 = Dropout(0.5)(middle_layer1)
-    middle_layer2 = Dense(512, activation="relu")(dropout1)
-    dropout2 = Dropout(0.5)(middle_layer2)
-    middle_layer3 = Dense(256, activation="relu")(dropout2)
-    dropout3 = Dropout(0.5)(middle_layer3)
-    output_layer = Dense(num_classes, activation="softmax")(dropout3)
-    model = Model(inputs=input_layer, outputs=output_layer)
-    optimizer = Adam(learning_rate=0.0001)
+    model = tf.keras.Sequential([
+        tf.keras.layers.Input(shape=input_shape),
+        tf.keras.layers.Dense(1024, activation="relu"),
+        tf.keras.layers.Dropout(0.5),
+        tf.keras.layers.Dense(512, activation="relu"),
+        tf.keras.layers.Dropout(0.5),
+        tf.keras.layers.Dense(256, activation="relu"),
+        tf.keras.layers.Dropout(0.5),
+        tf.keras.layers.Dense(num_classes, activation="softmax")
+    ])
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
     model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=['acc'])
     return model
 
 def train_model(model, X_train, y_train, epochs=50):
-    early_stop = EarlyStopping(monitor='val_loss', patience=5, verbose=1, restore_best_weights=True)
+    early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, verbose=1, restore_best_weights=True)
     model.fit(X_train, y_train, epochs=epochs, validation_split=0.1, callbacks=[early_stop], verbose=1)
 
 def evaluate_model(model, X_test, y_test):
@@ -75,7 +72,7 @@ def main():
         return
     X_train, X_test, y_train, y_test = preprocess_data(X, y)
     model = build_model(X_train.shape[1:], len(labels))
-    train_model(model, X_train, y_train, epochs=80)  # Increase the number of epochs
+    train_model(model, X_train, y_train, epochs=100)  # Increase the number of epochs
     evaluate_model(model, X_test, y_test)
     save_model(model, labels)
 

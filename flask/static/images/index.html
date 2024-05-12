@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/MoodSick.png') }}" alt="MoodSick Logo" class="logo">
+        <form action="/submit" method="post">
+            <label for="lang">Enter your preferred language:</label>
+            <input type="text" id="lang" name="lang" required>
+            <label for="artist">Enter your preferred artist:</label>
+            <input type="text" id="artist" name="artist" required>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="emotion-label">Detected Emotion: </p>
+        <div id="video-feed"></div>
+    </div>
+</body>
+</html>
