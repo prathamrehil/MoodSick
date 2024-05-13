@@ -37,7 +37,7 @@ cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 # Create Tkinter window
 window = tk.Tk()
 window.title("Mood Detection")
-window.geometry("900x700")
+window.geometry("1080x720")
 window.configure(bg="#f0f0f0")
 
 # Function to capture frame and update GUI
@@ -93,7 +93,7 @@ def update_frame():
     label_img.image = img
 
     # Repeat after 10 ms
-    window.after(3, update_frame)
+    window.after(1, update_frame)
 
 # Function to handle submit button click
 def submit():
@@ -109,38 +109,53 @@ def submit():
     # Open the URL in a web browser
     webbrowser.open(url)
 
+
 # Create label to display logo
 logo_img = Image.open("images/MoodSick.png")
-logo_img = logo_img.resize((400, 200), Image.LANCZOS)
+logo_img = logo_img.resize((650, 320), Image.LANCZOS)
 logo_img = ImageTk.PhotoImage(logo_img)
 logo_label = tk.Label(window, image=logo_img, bg="#f0f0f0")
-logo_label.pack(pady=10)
+logo_label.pack(pady=10, side=tk.TOP, anchor=tk.CENTER)
+
 # Create a frame for the left column
 left_frame = tk.Frame(window, bg="#f0f0f0")
 left_frame.pack(side=tk.LEFT, padx=10)
 
-# Create label for preferred language
-lang_label = tk.Label(left_frame, text="Enter your preferred language:", bg="#f0f0f0")
-lang_label.grid(row=0, column=0, pady=5)
-lang_entry = tk.Entry(left_frame)
-lang_entry.grid(row=1, column=0, pady=5)
+# Add Mood Sick description
+# moodsick_description = tk.Label(left_frame, text="📌 Mood Sick is an emotion detection-based music recommendation system", bg="#f0f0f0", fg="black", font=("Arial", 12))
+# moodsick_description.pack(pady=5)
 
-# Create label for preferred artist
-artist_label = tk.Label(left_frame, text="Enter your preferred artist:", bg="#f0f0f0")
-artist_label.grid(row=2, column=0, pady=5)
-artist_entry = tk.Entry(left_frame)
-artist_entry.grid(row=3, column=0, pady=5)
+# # Add recommendation prompt
+recommendation_prompt = tk.Label(left_frame, text="📌 Let's find some music! Enter the artist's name and the language you prefer", bg="#f0f0f0", fg="black", font=("Arial", 12))
+recommendation_prompt.pack(pady=5)
 
-# Create submit button
-submit_btn = tk.Button(left_frame, text="Submit", command=submit, bg="#4CAF50", fg="white", font=("Arial", 20, "bold"))
-submit_btn.grid(row=4, column=0, pady=10)
+# Add label for preferred language
+lang_label = tk.Label(left_frame, text="Enter your preferred language:", bg="#f0f0f0", fg="black", font=("Arial", 14))  # Updated font size
+lang_label.pack(pady=5)
+
+# Create entry box for preferred language with circular edges
+lang_entry = tk.Entry(left_frame, width=30, borderwidth=4, relief="groove",font=("Arial", 14))  # Increased width and added borderwidth and relief attributes
+lang_entry.pack(pady=5)
+
+# Add label for preferred artist
+artist_label = tk.Label(left_frame, text="Enter your preferred artist:", bg="#f0f0f0", fg="black", font=("Arial", 14))  # Updated font size
+artist_label.pack(pady=5)
+
+# Create entry box for preferred artist with circular edges
+artist_entry = tk.Entry(left_frame, width=30, borderwidth=4, relief="groove",font=("Arial", 14))  # Increased width and added borderwidth and relief attributes
+artist_entry.pack(pady=5)
+
+# Create submit button with circular edges
+submit_btn = tk.Button(left_frame, text="Submit", command=submit, bg="#4CAF50", fg="white", font=("Arial", 16, "bold"), borderwidth=4, relief="groove")  # Updated font size and color, added borderwidth and relief
+submit_btn.pack(pady=8)
+
 
 # Create a frame for the right column
 right_frame = tk.Frame(window, bg="#f0f0f0")
 right_frame.pack(side=tk.RIGHT, padx=10)
 
 # Create label to display detected emotion
-emotion_label = tk.Label(right_frame, text="Detected Emotion: ", bg="#f0f0f0", font=("Arial", 20, "bold"))
+emotion_label = tk.Label(right_frame, text="Detected Emotion: ", bg="#f0f0f0", font=("Arial", 18, "bold"), fg="green")  # Set fg to "green"
 emotion_label.pack(pady=5)
 
 # Create label to display video feed
